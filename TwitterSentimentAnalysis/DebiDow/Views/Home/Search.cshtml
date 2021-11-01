@@ -1,0 +1,27 @@
+﻿@model List<DebiDow.Application.UseCases.AnalyzeSentiment.AnalyzeSentimentSample>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Text</th>
+                <th scope="col">Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sample in Model)
+            {
+                <tr>
+                    <th scope="row">@sample.Id</th>
+                    <td>@sample.Text</td>
+                    <td>@sample.Score.ToString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+} else
+{
+    <h3>No results found</h3>
+}
