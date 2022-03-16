@@ -1,1 +1,1 @@
-# AWS SES Email forwarding
+# AWS SES Email Forwarding
