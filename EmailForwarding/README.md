@@ -8,5 +8,5 @@ Forwards received SES emails 📧. Example support@business.com >> personal@emai
 - Activate *ef-ses-rules* SES email receiving rule. To do this: 
   - Log in to AWS console
   - Navigate to SES
-  - Select *Email Receiving*. Not all AWS regions have email receiving feature. For example eu-west-1 does but eu-west-2 does not.
+  - Select *Email Receiving*. Not all AWS regions have email receiving feature. For example *eu-west-1* does but *eu-west-2* does not.
   - Select *ef-ses-rules* rule and set it as as active
