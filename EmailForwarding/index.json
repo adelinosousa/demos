@@ -1,0 +1,170 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "SES Email Forwarding",
+  "Parameters": {
+    "TargetAccountId": {
+      "Type": "String",
+      "MinLength": 12
+    }
+  },
+  "Resources": {
+    "SESS3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "ef-ses"
+      }
+    },
+    "SESS3BucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "DependsOn": "SESS3Bucket",
+      "Properties": {
+        "Bucket": {
+          "Ref": "SESS3Bucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Sid": "AllowSESPut",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ses.amazonaws.com"
+              },
+              "Action": "s3:PutObject",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  ["arn:aws:s3:::", { "Ref": "SESS3Bucket" }, "/*"]
+                ]
+              },
+              "Condition": {
+                "StringEquals": {
+                  "aws:Referer": { "Ref": "TargetAccountId" }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "SESFunctionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "EF-Function-EmailReceived",
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": ["lambda.amazonaws.com"]
+              },
+              "Action": ["sts:AssumeRole"]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "EF-Function-EmailReceived-Logs",
+            "PolicyDocument": {
+              "Statement": {
+                "Effect": "Allow",
+                "Action": [
+                  "logs:CreateLogGroup",
+                  "logs:CreateLogStream",
+                  "logs:PutLogEvents"
+                ],
+                "Resource": "arn:aws:logs:*:*:*"
+              }
+            }
+          },
+          {
+            "PolicyName": "EF-Function-EmailReceived-SendEmail",
+            "PolicyDocument": {
+              "Statement": {
+                "Effect": "Allow",
+                "Action": "ses:SendRawEmail",
+                "Resource": "*"
+              }
+            }
+          },
+          {
+            "PolicyName": "EF-Function-EmailReceived-RWS3",
+            "PolicyDocument": {
+              "Statement": {
+                "Effect": "Allow",
+                "Action": ["s3:GetObject", "s3:PutObject"],
+                "Resource": {
+                  "Fn::Join": [
+                    "",
+                    ["arn:aws:s3:::", { "Ref": "SESS3Bucket" }, "/*"]
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "SESFunction": {
+      "Type": "AWS::Lambda::Function",
+      "DependsOn": "SESFunctionRole",
+      "Properties": {
+        "FunctionName": "EF-Function-EmailReceived",
+        "Handler": "index.handler",
+        "Runtime": "nodejs12.x",
+        "Code": {
+          "S3Bucket": "ef-functions",
+          "S3Key": "ef-function-emailreceived.zip"
+        },
+        "MemorySize": 128,
+        "Timeout": 10,
+        "Role": {
+          "Fn::GetAtt": ["SESFunctionRole", "Arn"]
+        }
+      }
+    },
+    "SESFunctionPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "DependsOn": "SESFunction",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": { "Ref": "SESFunction" },
+        "Principal": "ses.amazonaws.com",
+        "SourceAccount": { "Ref": "TargetAccountId" }
+      }
+    },
+    "SESRuleSet": {
+      "Type": "AWS::SES::ReceiptRuleSet",
+      "DependsOn": "SESFunction",
+      "Properties": {
+        "RuleSetName": "ef-ses-rules"
+      }
+    },
+    "SESRule": {
+      "Type": "AWS::SES::ReceiptRule",
+      "DependsOn": "SESRuleSet",
+      "Properties": {
+        "RuleSetName": {
+          "Ref": "SESRuleSet"
+        },
+        "Rule": {
+          "Name": "ef-ses-default-rule",
+          "Enabled": true,
+          "ScanEnabled": true,
+          "Recipients": ["support@test.com"],
+          "Actions": [
+            {
+              "S3Action": {
+                "BucketName": "ef-ses"
+              }
+            },
+            {
+              "LambdaAction": {
+                "FunctionArn": { "Fn::GetAtt": ["SESFunction", "Arn"] }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
