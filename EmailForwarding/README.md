@@ -5,6 +5,7 @@ Forwards received SES emails 📧. Example support@business.com >> personal@emai
 ## Setup
 - Use cloudformation [script](https://github.com/adelinosousa/demos/blob/main/EmailForwarding/index.json) to create necessary resources and policies
 - Modify [lambda](https://github.com/arithmetric/aws-lambda-ses-forwarder/blob/master/index.js) code accordingly and upload it to *ef-ses* bucket as *ef-function-emailreceived.zip*
+- Add MX record to DNS zone
 - Activate *ef-ses-rules* SES email receiving rule. To do this: 
   - Log in to AWS console
   - Navigate to SES
