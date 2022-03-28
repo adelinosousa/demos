@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "License.Audit": {
+      "commandName": "Project"
+    }
+  }
+}
