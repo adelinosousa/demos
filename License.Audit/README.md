@@ -17,6 +17,6 @@ License.Audit -p C:\Path\To\NetFramework\Project
 
 ### Sample output
 
-![]()
+![](sample.jpg)
 
 **NOTE** Csv file will be created in the same directory as .exe.
