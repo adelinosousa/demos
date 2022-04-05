@@ -2,7 +2,7 @@
 using Amazon.S3.Model;
 using Amazon.S3.Util;
 
-namespace AWSS3Sample
+namespace AWS.SDK.Samples.S3
 {
     public class Bucket
     {

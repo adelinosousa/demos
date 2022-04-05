@@ -1,13 +1,14 @@
 ﻿using Amazon;
+using Amazon.CognitoIdentityProvider;
 using Amazon.Extensions.NETCore.Setup;
 using Amazon.Runtime;
 using Amazon.S3;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AWSSDKServices
+namespace AWS.SDK.Samples.Application
 {
-    public static class DependencyInjection
+    internal static class DependencyInjection
     {
         public static IServiceCollection AddAWSServices(this IServiceCollection services, IConfiguration configuration)
         {
@@ -18,6 +19,7 @@ namespace AWSSDKServices
             });
 
             services.AddAWSService<IAmazonS3>();
+            services.AddAWSService<IAmazonCognitoIdentityProvider>();
 
             return services;
         }
