@@ -1,23 +1,26 @@
-﻿using Amazon.CognitoIdentityProvider;
-using AWS.SDK.Cognito;
-using AWS.SDK.Samples.Application;
+﻿using AWS.SDK.Samples.Application;
+using AWS.SDK.Samples.Cognito.Models;
+using AWS.SDK.Samples.Cognito.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-var host = App.Create();
+var host = App.Create((context, services) =>
+{
+    services.AddSingleton<IIdentityProvider, CognitoService>();
+});
 
 var config = host.Services.GetRequiredService<IConfiguration>();
-var s3Client = host.Services.GetRequiredService<IAmazonCognitoIdentityProvider>();
+var cognito = host.Services.GetRequiredService<IIdentityProvider>();
 
-var userPool = new UserPool(s3Client, config["Cognito:UserPool:Name"]);
+var userPool = new UserPool(config["Cognito:UserPool:Name"]);
 
-if (await userPool.Create())
+if (await cognito.Create(userPool))
 {
     Console.WriteLine($"'{config["Cognito:UserPool:Name"]}' user pool created");
 }
 
-if (await userPool.Delete())
+if (await cognito.Delete(userPool))
 {
     Console.WriteLine($"'{config["Cognito:UserPool:Name"]}' user pool deleted");
 }

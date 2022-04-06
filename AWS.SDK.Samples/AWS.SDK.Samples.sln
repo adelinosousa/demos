@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWS.SDK.Samples.Application", "src\AWS.SDK.Samples.Application\AWS.SDK.Samples.Application.csproj", "{33FD16E2-CB07-4A61-AEB2-B8DF6BD81856}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AWS.SDK.Samples.Application", "src\AWS.SDK.Samples.Application\AWS.SDK.Samples.Application.csproj", "{33FD16E2-CB07-4A61-AEB2-B8DF6BD81856}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWS.SDK.Samples.Cognito", "src\AWS.SDK.Samples.Cognito\AWS.SDK.Samples.Cognito.csproj", "{D768E5CB-8295-44B2-BC14-292E6BB4B930}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AWS.SDK.Samples.Cognito", "src\AWS.SDK.Samples.Cognito\AWS.SDK.Samples.Cognito.csproj", "{D768E5CB-8295-44B2-BC14-292E6BB4B930}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWS.SDK.Samples.S3", "src\AWS.SDK.Samples.S3\AWS.SDK.Samples.S3.csproj", "{E7CB6C3D-AB42-44CB-8202-6235C3D984AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AWS.SDK.Samples.S3", "src\AWS.SDK.Samples.S3\AWS.SDK.Samples.S3.csproj", "{E7CB6C3D-AB42-44CB-8202-6235C3D984AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AWS.SDK.Samples.SES", "src\AWS.SDK.Samples.SES\AWS.SDK.Samples.SES.csproj", "{81716671-7117-44A1-980C-07AC8B0C4AF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{E7CB6C3D-AB42-44CB-8202-6235C3D984AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7CB6C3D-AB42-44CB-8202-6235C3D984AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7CB6C3D-AB42-44CB-8202-6235C3D984AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81716671-7117-44A1-980C-07AC8B0C4AF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81716671-7117-44A1-980C-07AC8B0C4AF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81716671-7117-44A1-980C-07AC8B0C4AF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81716671-7117-44A1-980C-07AC8B0C4AF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,30 +1,33 @@
-﻿using Amazon.S3;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using AWS.SDK.Samples.S3;
 using AWS.SDK.Samples.Application;
+using AWS.SDK.Samples.S3.Services;
+using AWS.SDK.Samples.S3.Models;
 
-var host = App.Create();
+var host = App.Create((context, services) =>
+{
+    services.AddSingleton<ICloudStorage, S3Service>();
+});
 
 var config = host.Services.GetRequiredService<IConfiguration>();
-var s3Client = host.Services.GetRequiredService<IAmazonS3>();
+var s3Service = host.Services.GetRequiredService<ICloudStorage>();
 
-var bucket = new Bucket(s3Client, config["S3:Bucket:Name"]);
+var bucket = new Bucket(config["S3:Bucket:Name"]);
 
-if (await bucket.Create())
+if (await s3Service.Create(bucket))
 {
     Console.WriteLine($"'{config["S3:Bucket:Name"]}' bucket created");
 }
 
-if (await bucket.Exists())
+if (await s3Service.Exists(bucket))
 {
     Console.WriteLine($"'{config["S3:Bucket:Name"]}' bucket exists");
 }
 
-Console.WriteLine($"'{config["S3:Bucket:Name"]}' bucket location is '{await bucket.Location()}'");
+Console.WriteLine($"'{config["S3:Bucket:Name"]}' bucket location is '{await s3Service.Location(bucket)}'");
 
-if (await bucket.Delete())
+if (await s3Service.Delete(bucket))
 {
     Console.WriteLine($"'{config["S3:Bucket:Name"]}' bucket deleted");
 }
