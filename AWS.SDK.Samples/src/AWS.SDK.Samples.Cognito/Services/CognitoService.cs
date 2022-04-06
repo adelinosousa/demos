@@ -1,30 +1,27 @@
 ﻿using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
+using AWS.SDK.Samples.Cognito.Models;
 using System.Net;
 
-namespace AWS.SDK.Cognito
+namespace AWS.SDK.Samples.Cognito.Services
 {
-    public class UserPool
+    public class CognitoService : IIdentityProvider
     {
         private readonly IAmazonCognitoIdentityProvider identityProvider;
-        private readonly string poolName;
 
-        public UserPool(IAmazonCognitoIdentityProvider identityProvider, string poolName)
+        public CognitoService(IAmazonCognitoIdentityProvider identityProvider)
         {
             this.identityProvider = identityProvider;
-            this.poolName = poolName;
         }
 
-        public string? Id { get; private set; }
-
-        public async Task<bool> Create()
+        public async Task<bool> Create(IIdentityTenant tenant)
         {
-            if (!await IsPoolNameUnique())
+            if (!await IsPoolNameUnique(tenant))
                 return false;
 
             var response = await identityProvider.CreateUserPoolAsync(new CreateUserPoolRequest
             {
-                PoolName = poolName,
+                PoolName = tenant.Name,
                 UsernameAttributes = { "email" },
                 Schema = {
                     new SchemaAttributeType
@@ -48,20 +45,20 @@ namespace AWS.SDK.Cognito
                 }
             });
 
-            Id = response.UserPool.Id;
+            tenant.Id = response.UserPool.Id;
 
             return response.HttpStatusCode == HttpStatusCode.OK;
         }
 
-        public async Task<bool> CreateClient()
+        public async Task<bool> CreateClient(IIdentityTenant tenant)
         {
-            if (string.IsNullOrWhiteSpace(Id))
+            if (string.IsNullOrWhiteSpace(tenant.Id))
                 return false;
 
             var response = await identityProvider.CreateUserPoolClientAsync(new CreateUserPoolClientRequest
             {
-                ClientName = $"{poolName}-client",
-                UserPoolId = Id,
+                ClientName = $"{tenant.Name}-client",
+                UserPoolId = tenant.Id,
                 RefreshTokenValidity = 30,
                 AccessTokenValidity = 5,
                 IdTokenValidity = 5,
@@ -77,21 +74,21 @@ namespace AWS.SDK.Cognito
             return response.HttpStatusCode == HttpStatusCode.OK;
         }
 
-        public async Task<bool> Delete()
+        public async Task<bool> Delete(IIdentityTenant tenant)
         {
             var response = await identityProvider.DeleteUserPoolAsync(new DeleteUserPoolRequest
             {
-                UserPoolId = Id
+                UserPoolId = tenant.Id
             });
 
             return response.HttpStatusCode == HttpStatusCode.OK;
         }
 
-        private async Task<bool> IsPoolNameUnique()
+        private async Task<bool> IsPoolNameUnique(IIdentityTenant tenant)
         {
             var response = await identityProvider.ListUserPoolsAsync(new ListUserPoolsRequest { MaxResults = 10 });
 
-            return !response.UserPools.Any(x => x.Name.Equals(poolName, StringComparison.InvariantCultureIgnoreCase));
+            return !response.UserPools.Any(x => x.Name.Equals(tenant.Name, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }
