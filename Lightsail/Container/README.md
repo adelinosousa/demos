@@ -71,7 +71,24 @@ To validate certificate, navigate to the DNS Zone and add CNAME and the A record
 
 ![image](https://user-images.githubusercontent.com/4997221/166155258-6c0d9ff2-6c5b-429c-b057-ac68d3f439a1.png)
 
-Once the SSL certificate is validated, attach it to the container service
+Once the SSL certificate is validated, attach it to the container service in the "Custom Domains" tab
+
+## Email setup with custom domain (SES)
+
+Create identity (domain)
+
+![image](https://user-images.githubusercontent.com/4997221/166155796-eb5621c1-628d-44d8-992a-2dfa2984df6b.png)
+
+Verify identity (domain) by adding the CNAME records to the DNS zone
+
+![image](https://user-images.githubusercontent.com/4997221/166156273-c8f3418e-7ca4-41c8-9c61-6b01db383a7e.png)
+
+Add DNS MX record to direct email to the mail server. Skip this step if you dont need to receive emails
+
+Subdomain: "@" 
+Maps to: "inbound-smtp.<aws region>.amazonaws.com"
+
+
 
 
 
