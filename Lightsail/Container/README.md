@@ -52,13 +52,13 @@ This may take a while, you should receive an email confirmation once the update 
 
 ---
 
-2. Generating SSL certificate
+2. Generating SSL certificate and DNS hostname setup
 
 Select your container and find the "Custom Domains" tab
 
 ![image](https://user-images.githubusercontent.com/4997221/166154763-ef636949-982e-46d7-b8bc-4df9b07fbaae.png)
 
-Create certificate
+Create SSL certificate
 
 ![image](https://user-images.githubusercontent.com/4997221/166154837-c63e8637-e82b-4b78-a40e-7f65cdfe6862.png)
 
@@ -71,6 +71,7 @@ To validate certificate, navigate to the DNS Zone and add CNAME and the A record
 
 ![image](https://user-images.githubusercontent.com/4997221/166155258-6c0d9ff2-6c5b-429c-b057-ac68d3f439a1.png)
 
+Once the SSL certificate is validated, attach it to the container service
 
 
 
