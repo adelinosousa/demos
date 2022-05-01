@@ -62,6 +62,15 @@ Create certificate
 
 ![image](https://user-images.githubusercontent.com/4997221/166154837-c63e8637-e82b-4b78-a40e-7f65cdfe6862.png)
 
-To validate certificate, navigate to the DNS Zone and add CNAME record
+To validate certificate, navigate to the DNS Zone and add CNAME and the A record
 
 ![image](https://user-images.githubusercontent.com/4997221/166154993-4ff6bed4-b9cb-43a2-bedf-b022dd61b047.png)
+![image](https://user-images.githubusercontent.com/4997221/166155352-b12e8f67-c0c6-4c75-8bfa-a1399a193de1.png)
+
+*Note*: "A" record must resolve to your container using "@" as the subdomain, example
+
+![image](https://user-images.githubusercontent.com/4997221/166155258-6c0d9ff2-6c5b-429c-b057-ac68d3f439a1.png)
+
+
+
+
